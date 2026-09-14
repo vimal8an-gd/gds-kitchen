@@ -108,13 +108,14 @@
     }
     .chip[aria-pressed="true"] { background: var(--cream); color: var(--brown); border-color: var(--cream); }
 
-    textarea {
-      width: 100%; min-height: 96px; resize: vertical; font: inherit;
+    textarea, .survey input[type="text"] {
+      width: 100%; font: inherit;
       background: rgba(241, 230, 210, 0.06); color: var(--on-dark);
       border: 1px solid var(--on-dark-line); border-radius: 12px; padding: .8rem;
     }
-    textarea::placeholder { color: var(--on-dark-muted); }
-    textarea:focus { outline: none; border-color: var(--cream); }
+    textarea { min-height: 96px; resize: vertical; }
+    textarea::placeholder, .survey input[type="text"]::placeholder { color: var(--on-dark-muted); }
+    textarea:focus, .survey input[type="text"]:focus { outline: none; border-color: var(--cream); }
 
     .submit {
       background: var(--terracotta); color: var(--cream-soft); border: none;
@@ -229,6 +230,59 @@
             </div>
 
             <div class="q">
+              <span class="q-label">Compared to what you normally buy, this was… <span class="opt">(optional)</span></span>
+              <div class="chips" data-group="comparison" data-select="single">
+                <button type="button" class="chip" aria-pressed="false">Better</button>
+                <button type="button" class="chip" aria-pressed="false">About the same</button>
+                <button type="button" class="chip" aria-pressed="false">Worse</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <span class="q-label">Would you buy this again if it were in shops? <span class="opt">(optional)</span></span>
+              <div class="chips" data-group="repeat" data-select="single">
+                <button type="button" class="chip" aria-pressed="false">Yes</button>
+                <button type="button" class="chip" aria-pressed="false">Maybe</button>
+                <button type="button" class="chip" aria-pressed="false">No</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <span class="q-label">How often would you realistically buy this? <span class="opt">(optional)</span></span>
+              <div class="chips" data-group="frequency" data-select="single">
+                <button type="button" class="chip" aria-pressed="false">Weekly</button>
+                <button type="button" class="chip" aria-pressed="false">Monthly</button>
+                <button type="button" class="chip" aria-pressed="false">Occasionally</button>
+                <button type="button" class="chip" aria-pressed="false">Only for festivals</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <span class="q-label">When would you buy this? <span class="opt">(optional, pick any)</span></span>
+              <div class="chips" data-group="occasion">
+                <button type="button" class="chip" aria-pressed="false">Everyday snack</button>
+                <button type="button" class="chip" aria-pressed="false">Gifting</button>
+                <button type="button" class="chip" aria-pressed="false">Festival</button>
+                <button type="button" class="chip" aria-pressed="false">Guests</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <span class="q-label">What would you be happy paying for this? <span class="opt">(optional)</span></span>
+              <div class="chips" data-group="price" data-select="single">
+                <button type="button" class="chip" aria-pressed="false">₹50–70</button>
+                <button type="button" class="chip" aria-pressed="false">₹70–100</button>
+                <button type="button" class="chip" aria-pressed="false">₹100–130</button>
+                <button type="button" class="chip" aria-pressed="false">₹130+</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <label for="area">Your area or pincode <span class="opt">(optional)</span></label>
+              <input type="text" id="area" name="area" placeholder="e.g. Adyar, Chennai — or 600020" autocomplete="off" />
+            </div>
+
+            <div class="q">
               <label for="notes">Anything else? <span class="opt">(optional)</span></label>
               <textarea id="notes" name="notes" placeholder="Write a line or two if you'd like…"></textarea>
             </div>
@@ -269,10 +323,17 @@
     });
     document.getElementById("stars").addEventListener("mouseleave", () => paint(rating));
 
-    // ----- Multi-select chips -----
-    document.querySelectorAll(".chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        chip.setAttribute("aria-pressed", chip.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    // ----- Chips: multi-select by default, single-select when data-select="single" -----
+    document.querySelectorAll(".chips").forEach((group) => {
+      const single = group.dataset.select === "single";
+      group.querySelectorAll(".chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          const wasOn = chip.getAttribute("aria-pressed") === "true";
+          if (single) {
+            group.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", "false"));
+          }
+          chip.setAttribute("aria-pressed", wasOn ? "false" : "true");
+        });
       });
     });
     const collect = (group) =>
@@ -304,6 +365,12 @@
         rating: rating,
         liked: collect("liked"),
         improve: collect("improve"),
+        comparison: collect("comparison"),
+        repeat: collect("repeat"),
+        frequency: collect("frequency"),
+        occasion: collect("occasion"),
+        price: collect("price"),
+        area: document.getElementById("area").value.trim(),
         notes: document.getElementById("notes").value.trim(),
       };
 
