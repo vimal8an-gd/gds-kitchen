@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GD's Kitchen — Trial Batch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f1e6d2;
+      --cream-soft: #f8f1e4;
+      --paper: #fffcf6;
+      --brown: #5c331e;
+      --terracotta: #a2472e;
+      --rust: #7e351f;
+      --muted: rgba(92, 51, 30, 0.72);
+      --line: rgba(92, 51, 30, 0.18);
+      --on-dark: #f1e6d2;
+      --on-dark-muted: rgba(241, 230, 210, 0.75);
+      --on-dark-line: rgba(241, 230, 210, 0.4);
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "Karla", -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--brown);
+      font-family: var(--sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 3.5rem 0; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.1; }
+
+    /* ---------- Hero ---------- */
+    .hero { padding-top: 4.5rem; }
+    .badge {
+      display: inline-block; background: var(--paper); color: var(--rust);
+      font-weight: 700; font-size: .82rem; letter-spacing: .02em;
+      padding: .45rem 1rem; border-radius: 999px; margin-bottom: 1.75rem;
+    }
+    h1 { font-size: clamp(2.8rem, 9vw, 3.6rem); margin: 0 0 1rem; letter-spacing: -0.01em; }
+    .lede { font-size: 1.35rem; color: var(--brown); margin: 0 0 1.5rem; max-width: 30ch; }
+    .intro { font-size: 1.05rem; color: var(--muted); max-width: 52ch; margin: 0; }
+
+    /* ---------- Maker ---------- */
+    .eyebrow { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--terracotta); font-weight: 700; margin: 0 0 .5rem; }
+    .maker { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .monogram {
+      flex: 0 0 auto; width: 72px; height: 72px; border-radius: 50%;
+      background: var(--brown); color: var(--cream); font-family: var(--serif);
+      font-size: 1.7rem; font-weight: 600; display: grid; place-items: center;
+    }
+    .maker h2 { font-size: 1.9rem; margin: 0 0 .6rem; }
+    .maker p { margin: 0; color: var(--muted); }
+
+    /* ---------- Steps ---------- */
+    h2.section-title { font-size: 2rem; margin: 0 0 2rem; }
+    .step { display: flex; gap: 1.1rem; padding: 1rem 0; border-top: 1px solid var(--line); }
+    .step:first-of-type { border-top: none; padding-top: 0; }
+    .step .num {
+      flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+      border: 1.5px solid var(--terracotta); color: var(--terracotta);
+      font-family: var(--serif); font-size: 1.1rem; display: grid; place-items: center;
+    }
+    .step h3 { font-size: 1.25rem; margin: .15rem 0 .3rem; }
+    .step p { margin: 0; color: var(--muted); }
+
+    /* ---------- Ingredients ---------- */
+    .pills { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.5rem; }
+    .pill {
+      background: var(--paper); border: 1px solid var(--line); color: var(--brown);
+      padding: .5rem 1.1rem; border-radius: 999px; font-weight: 500;
+    }
+    .note { color: var(--muted); max-width: 54ch; margin: 0; }
+
+    /* ---------- Survey card ---------- */
+    .survey {
+      background: var(--brown); color: var(--on-dark);
+      border-radius: 22px; padding: clamp(1.75rem, 5vw, 2.75rem); margin: 1rem 0 4rem;
+    }
+    .survey h2 { font-size: 2rem; color: var(--on-dark); margin: 0 0 .5rem; }
+    .survey .sub { color: var(--on-dark-muted); margin: 0 0 2rem; }
+    .q { margin-bottom: 1.75rem; }
+    .q > label, .q > .q-label { display: block; font-weight: 700; margin-bottom: .8rem; }
+    .q .opt { font-weight: 400; color: var(--on-dark-muted); }
+
+    /* stars */
+    .stars { display: flex; gap: .5rem; }
+    .stars button {
+      background: none; border: none; padding: 0; cursor: pointer; line-height: 1;
+      font-size: 2.6rem; color: transparent;
+      -webkit-text-stroke: 1.6px var(--on-dark-line); transition: color .1s, -webkit-text-stroke-color .1s;
+    }
+    .stars button.on { color: var(--cream); -webkit-text-stroke-color: var(--cream); }
+    .stars-hint { color: var(--on-dark-muted); font-size: .9rem; margin: .6rem 0 0; }
+
+    /* chips */
+    .chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .chip {
+      background: none; border: 1px solid var(--on-dark-line); color: var(--on-dark);
+      padding: .5rem 1.1rem; border-radius: 999px; font: inherit; cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+    }
+    .chip[aria-pressed="true"] { background: var(--cream); color: var(--brown); border-color: var(--cream); }
+
+    textarea {
+      width: 100%; min-height: 96px; resize: vertical; font: inherit;
+      background: rgba(241, 230, 210, 0.06); color: var(--on-dark);
+      border: 1px solid var(--on-dark-line); border-radius: 12px; padding: .8rem;
+    }
+    textarea::placeholder { color: var(--on-dark-muted); }
+    textarea:focus { outline: none; border-color: var(--cream); }
+
+    .submit {
+      background: var(--terracotta); color: var(--cream-soft); border: none;
+      font: inherit; font-weight: 700; font-size: 1.02rem; padding: .9rem 1.6rem;
+      border-radius: 12px; cursor: pointer; transition: opacity .15s;
+    }
+    .submit:hover:not(:disabled) { opacity: .9; }
+    .submit:disabled { opacity: .6; cursor: not-allowed; }
+    .form-status { margin-top: 1rem; min-height: 1.3rem; color: var(--on-dark-muted); font-weight: 600; }
+    .form-status.err { color: #ffb4a0; }
+
+    .thanks { text-align: center; padding: 1rem 0; }
+    .thanks h2 { margin: 0 0 .5rem; }
+
+    footer { padding: 2.5rem 0 3.5rem; color: var(--muted); font-size: .95rem; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <span class="badge">Trial batch</span>
+      <h1>GD's Kitchen</h1>
+      <p class="lede">Traditional sweets, made the way my mother taught me.</p>
+      <p class="intro">This is a small trial batch. Before we make more, we want to know exactly what you thought — good or bad.</p>
+    </section>
+
+    <!-- MAKER -->
+    <section>
+      <div class="maker">
+        <div class="monogram" aria-hidden="true">GD</div>
+        <div>
+          <p class="eyebrow">The hands behind it</p>
+          <h2>Girijadevi</h2>
+          <p>Girijadevi has been making jaggery and traditional sweets in her home kitchen for over twenty years. GD's Kitchen started as sweets shared with neighbours and family — this trial batch is the next step: sharing them with you.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT'S MADE -->
+    <section>
+      <h2 class="section-title">How it's made</h2>
+      <div class="step">
+        <div class="num">1</div>
+        <div><h3>Sourced</h3><p>Jaggery and ingredients bought fresh from trusted local farmers — nothing processed or stored for long.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div><h3>Cooked</h3><p>Cooked slowly in small batches, the traditional way. No shortcuts, no machines.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div><h3>Packed</h3><p>Packed by hand the same day, so what reaches you is as fresh as it can be.</p></div>
+      </div>
+    </section>
+
+    <!-- INGREDIENTS -->
+    <section>
+      <h2 class="section-title">What's actually in it</h2>
+      <div class="pills">
+        <span class="pill">Jaggery</span>
+        <span class="pill">Ghee</span>
+        <span class="pill">Wheat flour</span>
+        <span class="pill">Cardamom</span>
+        <span class="pill">Dry fruits</span>
+      </div>
+      <p class="note">No preservatives, no artificial colour, and nothing added that Girijadevi wouldn't feed her own family.</p>
+    </section>
+
+    <!-- SURVEY -->
+    <section style="padding-top:1rem;">
+      <div class="survey" id="surveyCard">
+        <div id="formView">
+          <h2>Tell us honestly</h2>
+          <p class="sub">This takes less than a minute — and it decides what we make next.</p>
+
+          <form id="surveyForm">
+            <div class="q">
+              <span class="q-label">How was it, overall?</span>
+              <div class="stars" id="stars" role="radiogroup" aria-label="Overall rating">
+                <button type="button" data-value="1" aria-label="1 star">★</button>
+                <button type="button" data-value="2" aria-label="2 stars">★</button>
+                <button type="button" data-value="3" aria-label="3 stars">★</button>
+                <button type="button" data-value="4" aria-label="4 stars">★</button>
+                <button type="button" data-value="5" aria-label="5 stars">★</button>
+              </div>
+              <p class="stars-hint" id="starsHint">Tap a star to rate</p>
+            </div>
+
+            <div class="q">
+              <span class="q-label">What did you like? <span class="opt">(optional, pick any)</span></span>
+              <div class="chips" data-group="liked">
+                <button type="button" class="chip" aria-pressed="false">Taste</button>
+                <button type="button" class="chip" aria-pressed="false">Sweetness level</button>
+                <button type="button" class="chip" aria-pressed="false">Texture</button>
+                <button type="button" class="chip" aria-pressed="false">Freshness</button>
+                <button type="button" class="chip" aria-pressed="false">Packaging</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <span class="q-label">What could be better? <span class="opt">(optional, pick any)</span></span>
+              <div class="chips" data-group="improve">
+                <button type="button" class="chip" aria-pressed="false">Too sweet</button>
+                <button type="button" class="chip" aria-pressed="false">Not sweet enough</button>
+                <button type="button" class="chip" aria-pressed="false">Texture</button>
+                <button type="button" class="chip" aria-pressed="false">Packaging</button>
+                <button type="button" class="chip" aria-pressed="false">Price</button>
+              </div>
+            </div>
+
+            <div class="q">
+              <label for="notes">Anything else? <span class="opt">(optional)</span></label>
+              <textarea id="notes" name="notes" placeholder="Write a line or two if you'd like…"></textarea>
+            </div>
+
+            <button type="submit" class="submit" id="submitBtn">Send my review</button>
+            <div class="form-status" id="status" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+
+        <div id="thanksView" class="thanks hidden">
+          <h2>Thank you 🙏</h2>
+          <p class="sub" style="margin:0;">Your review is in. It genuinely shapes what we make next.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>GD's Kitchen — homemade, one batch at a time.</footer>
+  </div>
+
+  <script>
+    // ============================================================
+    // Paste your Apps Script Web App URL here (see SETUP.md).
+    // ============================================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3eai4tKBbncnUvGoZoV_rozIGIp1ZXimM1tS537diXT_6WsuYakJoZlKgFkE9aAZy/exec";
+
+    // ----- Star rating -----
+    let rating = 0;
+    const starEls = [...document.querySelectorAll("#stars button")];
+    const starsHint = document.getElementById("starsHint");
+    const paint = (n) => starEls.forEach((s, i) => s.classList.toggle("on", i < n));
+    starEls.forEach((star) => {
+      const v = Number(star.dataset.value);
+      star.addEventListener("mouseenter", () => paint(v));
+      star.addEventListener("click", () => {
+        rating = v; paint(v);
+        starsHint.textContent = `You rated ${v} out of 5`;
+      });
+    });
+    document.getElementById("stars").addEventListener("mouseleave", () => paint(rating));
+
+    // ----- Multi-select chips -----
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chip.setAttribute("aria-pressed", chip.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      });
+    });
+    const collect = (group) =>
+      [...document.querySelectorAll(`.chips[data-group="${group}"] .chip[aria-pressed="true"]`)]
+        .map((c) => c.textContent.trim()).join(", ");
+
+    // ----- Submit -----
+    const form = document.getElementById("surveyForm");
+    const btn = document.getElementById("submitBtn");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      status.className = "form-status";
+      status.textContent = "";
+
+      if (rating === 0) {
+        status.classList.add("err");
+        status.textContent = "Please tap a star to rate before sending.";
+        return;
+      }
+      if (SCRIPT_URL.includes("PASTE_YOUR")) {
+        status.classList.add("err");
+        status.textContent = "Setup incomplete: add your Web App URL in index.html.";
+        return;
+      }
+
+      const payload = {
+        rating: rating,
+        liked: collect("liked"),
+        improve: collect("improve"),
+        notes: document.getElementById("notes").value.trim(),
+      };
+
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      try {
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+        document.getElementById("formView").classList.add("hidden");
+        document.getElementById("thanksView").classList.remove("hidden");
+        document.getElementById("surveyCard").scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch (err) {
+        status.classList.add("err");
+        status.textContent = "Something went wrong — please try again.";
+        btn.disabled = false;
+        btn.textContent = "Send my review";
+      }
+    });
+  </script>
+</body>
+</html>
