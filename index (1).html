@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GD's Kitchen — Trial Batch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     Palette drawn from the product itself: jaggery brown, rice-
+     paper cream, turmeric gold, clay red, betel-leaf green.
+     ============================================================ */
+  :root{
+    --paper:      #F1E6D2;   /* warm rice-paper background */
+    --paper-soft: #F8F1E4;   /* lighter panel background */
+    --card:       #FFFCF6;   /* near-white card surface */
+    --jaggery:    #5C331E;   /* deep jaggery brown — headings, ink */
+    --jaggery-70: #7A4B30;   /* softer brown — body text */
+    --turmeric:   #C1832A;   /* gold accent — links, focus, fill */
+    --clay:       #A2472E;   /* clay red — the one bold accent */
+    --clay-dark:  #7E351F;
+    --leaf:       #435635;   /* deep green — small dividers */
+    --line:       #E2D3B7;   /* hairline borders on paper */
+    --shadow:     rgba(92,51,30,0.14);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--jaggery);
+    font-family:'Karla', -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    color:var(--jaggery);
+    margin:0 0 0.4em 0;
+    line-height:1.1;
+    font-weight:600;
+  }
+  p{ margin:0 0 1em 0; }
+  a{ color:var(--clay); }
+  img,svg{ display:block; max-width:100%; }
+  button{ font-family:inherit; }
+
+  :focus-visible{
+    outline:3px solid var(--turmeric);
+    outline-offset:2px;
+  }
+
+  .wrap{
+    max-width:560px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .block{
+    padding:56px 0;
+  }
+  .block + .block{
+    border-top:1px solid var(--line);
+  }
+
+  /* ---------------- HERO ---------------- */
+  .hero{
+    padding:64px 0 48px;
+    text-align:left;
+  }
+  .badge{
+    display:inline-block;
+    background:var(--card);
+    border:1px solid var(--line);
+    color:var(--clay-dark);
+    font-family:'Karla', sans-serif;
+    font-weight:700;
+    font-size:0.78rem;
+    letter-spacing:0.02em;
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 9vw, 3.4rem);
+    letter-spacing:-0.01em;
+  }
+  .hero .tagline{
+    font-size:1.15rem;
+    color:var(--jaggery-70);
+    max-width:26ch;
+    margin-bottom:0;
+  }
+  .hero .sub{
+    margin-top:18px;
+    font-size:0.98rem;
+    color:var(--jaggery-70);
+    max-width:38ch;
+  }
+
+  /* ---------------- MEET THE COOK ---------------- */
+  .cook-row{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    align-items:flex-start;
+  }
+  .avatar{
+    flex:0 0 auto;
+    width:104px;
+    height:104px;
+    border-radius:42% 58% 55% 45%/48% 42% 58% 52%;
+    background:linear-gradient(155deg, var(--turmeric), var(--clay));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--paper-soft);
+    font-family:'Fraunces', serif;
+    font-size:2rem;
+    font-weight:600;
+  }
+  .cook-name{
+    font-size:1.5rem;
+    margin-bottom:6px;
+  }
+  .cook-role{
+    color:var(--clay-dark);
+    font-weight:700;
+    font-size:0.85rem;
+    margin-bottom:14px;
+  }
+
+  /* ---------------- PROCESS ---------------- */
+  .steps{
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+    margin-top:28px;
+  }
+  .step{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+  }
+  .step .num{
+    flex:0 0 auto;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    border:1.5px solid var(--jaggery);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1rem;
+  }
+  .step h3{
+    font-size:1.15rem;
+    margin-bottom:4px;
+  }
+  .step p{
+    color:var(--jaggery-70);
+    font-size:0.95rem;
+    margin-bottom:0;
+  }
+
+  /* ---------------- AUTHENTICITY ---------------- */
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:20px 0 24px;
+  }
+  .chip{
+    background:var(--card);
+    border:1px solid var(--line);
+    color:var(--jaggery-70);
+    font-size:0.88rem;
+    padding:8px 16px;
+    border-radius:999px;
+  }
+  .trust-line{
+    color:var(--jaggery-70);
+    font-size:0.98rem;
+  }
+
+  /* ---------------- REVIEW (the one bold moment) ---------------- */
+  .review-block{
+    background:var(--jaggery);
+    color:var(--paper-soft);
+    border-radius:20px;
+    padding:36px 24px 40px;
+    margin:0 -4px;
+  }
+  .review-block h2{ color:var(--paper-soft); }
+  .review-block .sub{
+    color:#D9C4AC;
+    font-size:0.98rem;
+    margin-bottom:28px;
+  }
+  .field{ margin-bottom:26px; }
+  .field-label{
+    display:block;
+    font-weight:700;
+    font-size:0.95rem;
+    margin-bottom:12px;
+    color:var(--paper-soft);
+  }
+  .stars{
+    display:flex;
+    gap:8px;
+  }
+  .star-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:4px;
+    line-height:0;
+  }
+  .star-btn svg{ width:40px; height:40px; }
+  .star-btn path{
+    fill:transparent;
+    stroke:#D9C4AC;
+    stroke-width:1.5;
+    transition:fill 0.15s ease, stroke 0.15s ease;
+  }
+  .star-btn.filled path{
+    fill:var(--turmeric);
+    stroke:var(--turmeric);
+  }
+  .rating-hint{
+    margin-top:10px;
+    font-size:0.85rem;
+    color:#D9C4AC;
+    min-height:1.2em;
+  }
+  .rating-hint.error{ color:#F1B3A0; font-weight:700; }
+
+  .select-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .select-chip{
+    background:transparent;
+    border:1.5px solid #8A6A4E;
+    color:var(--paper-soft);
+    font-size:0.9rem;
+    padding:9px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background 0.15s ease, border-color 0.15s ease;
+  }
+  .select-chip.selected{
+    background:var(--turmeric);
+    border-color:var(--turmeric);
+    color:var(--jaggery);
+    font-weight:700;
+  }
+
+  textarea,
+  input[type="text"]{
+    width:100%;
+    background:#4A2A18;
+    border:1.5px solid #8A6A4E;
+    border-radius:10px;
+    color:var(--paper-soft);
+    font-family:inherit;
+    font-size:0.95rem;
+    padding:12px 14px;
+  }
+  textarea{ min-height:88px; resize:vertical; }
+  textarea::placeholder,
+  input[type="text"]::placeholder{ color:#B99878; }
+
+  .submit-btn{
+    width:100%;
+    background:var(--clay);
+    color:var(--paper-soft);
+    border:none;
+    border-radius:12px;
+    padding:16px;
+    font-size:1.02rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:background 0.15s ease;
+  }
+  .submit-btn:hover{ background:var(--clay-dark); }
+  .submit-btn:disabled{ opacity:0.6; cursor:not-allowed; }
+
+  .form-status{
+    margin-top:14px;
+    font-size:0.88rem;
+    color:#F1B3A0;
+    min-height:1.2em;
+  }
+
+  /* ---------------- THANK YOU ---------------- */
+  .thanks{
+    text-align:center;
+    padding:24px 4px 8px;
+  }
+  .thanks h2{ margin-bottom:10px; }
+  .thanks p{ color:#D9C4AC; }
+
+  [hidden]{ display:none !important; }
+
+  /* ---------------- FOOTER ---------------- */
+  footer{
+    padding:36px 0 48px;
+    text-align:left;
+    color:var(--jaggery-70);
+    font-size:0.85rem;
+  }
+
+  /* ---------------- TABLET / DESKTOP ---------------- */
+  @media (min-width:700px){
+    .wrap{ max-width:680px; }
+    .cook-row{ flex-direction:row; align-items:center; }
+    .steps{ flex-direction:row; gap:32px; }
+    .step{ flex-direction:column; gap:10px; flex:1; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- =========================================================
+       HERO
+       ========================================================= -->
+  <section class="hero block">
+    <div class="wrap">
+      <span class="badge">Trial batch</span>
+      <h1>GD's Kitchen</h1>
+      <p class="tagline">Traditional sweets, made the way my mother taught me.</p>
+      <p class="sub">This is a small trial batch. Before we make more, we want to know exactly what you thought — good or bad.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       MEET THE COOK
+       ========================================================= -->
+  <section class="block">
+    <div class="wrap">
+      <div class="cook-row">
+        <div class="avatar" aria-hidden="true">GD</div>
+        <div>
+          <p class="cook-role">The hands behind it</p>
+          <h2 class="cook-name">Girijadevi</h2>
+          <p>Girijadevi has been making jaggery and traditional sweets in her home kitchen for over twenty years. GD's Kitchen started as sweets shared with neighbours and family — this trial batch is the next step: sharing them with you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       THE PROCESS
+       ========================================================= -->
+  <section class="block">
+    <div class="wrap">
+      <h2>How it's made</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="num">1</span>
+          <div>
+            <h3>Sourced</h3>
+            <p>Jaggery and ingredients bought fresh — nothing processed or stored for long.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">2</span>
+          <div>
+            <h3>Cooked</h3>
+            <p>Cooked slowly in small batches, the traditional way. No shortcuts, no machines, no preservatives.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="num">3</span>
+          <div>
+            <h3>Packed</h3>
+            <p>Packed by hand the same day, so what reaches you is as fresh as it can be.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       AUTHENTICITY
+       ========================================================= -->
+  <section class="block">
+    <div class="wrap">
+      <h2>What's actually in it</h2>
+      <div class="chips">
+        <span class="chip">Peanuts</span>
+        <span class="chip">Raggi</span>
+        <span class="chip">Jaggery</span>
+        <span class="chip">Ghee</span>
+        <span class="chip">Cashew</span>
+        <span class="chip">Raisins</span>
+        <span class="chip">Cardamom</span>
+        <span class="chip">Sesame seeds</span>
+      </div>
+      <p class="trust-line">No preservatives, no artificial colour, and nothing added that Girijadevi wouldn't feed her own family.</p>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       QUICK REVIEW  (the core of the page)
+       ========================================================= -->
+  <section class="block" id="review-section">
+    <div class="wrap">
+
+      <div class="review-block">
+
+        <div id="review-form-view">
+          <h2>Tell us honestly</h2>
+          <p class="sub">This takes less than a minute — and it decides what we make next.</p>
+
+          <form id="review-form" novalidate>
+
+            <div class="field">
+              <span class="field-label">Your name (optional)</span>
+              <input type="text" id="reviewerName" placeholder="e.g. Priya" maxlength="60">
+            </div>
+
+            <div class="field">
+              <span class="field-label">How was it, overall?</span>
+              <div class="stars" role="radiogroup" aria-label="Star rating">
+                <button type="button" class="star-btn" data-value="1" aria-label="1 star" aria-pressed="false">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.1 5.7 20.8l1.7-6.9L2 9.2l7.1-.6L12 2z"/></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="2" aria-label="2 stars" aria-pressed="false">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.1 5.7 20.8l1.7-6.9L2 9.2l7.1-.6L12 2z"/></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="3" aria-label="3 stars" aria-pressed="false">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.1 5.7 20.8l1.7-6.9L2 9.2l7.1-.6L12 2z"/></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="4" aria-label="4 stars" aria-pressed="false">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.1 5.7 20.8l1.7-6.9L2 9.2l7.1-.6L12 2z"/></svg>
+                </button>
+                <button type="button" class="star-btn" data-value="5" aria-label="5 stars" aria-pressed="false">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.1 5.7 20.8l1.7-6.9L2 9.2l7.1-.6L12 2z"/></svg>
+                </button>
+              </div>
+              <p class="rating-hint" id="rating-hint">Tap a star to rate</p>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Would you buy this again if it were sold in shops?</span>
+              <div class="select-chips" data-group="buyAgain" data-mode="single">
+                <button type="button" class="select-chip">Yes</button>
+                <button type="button" class="select-chip">Maybe</button>
+                <button type="button" class="select-chip">No</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">What would you be happy paying for this per piece? (optional)</span>
+              <div class="select-chips" data-group="priceBand" data-mode="single">
+                <button type="button" class="select-chip">₹10-15</button>
+                <button type="button" class="select-chip">₹15-20</button>
+                <button type="button" class="select-chip">₹20-25</button>
+                <button type="button" class="select-chip">₹25+</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">How often would you realistically buy this? (optional)</span>
+              <div class="select-chips" data-group="frequency" data-mode="single">
+                <button type="button" class="select-chip">Weekly</button>
+                <button type="button" class="select-chip">Monthly</button>
+                <button type="button" class="select-chip">Occasionally</button>
+                <button type="button" class="select-chip">Birthdays</button>
+                <button type="button" class="select-chip">Snacks for kids</button>
+                <button type="button" class="select-chip">Only for festivals</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">When would you buy this?</span>
+              <div class="select-chips" data-group="occasion" data-mode="single">
+                <button type="button" class="select-chip">Everyday snack</button>
+                <button type="button" class="select-chip">Gifting</button>
+                <button type="button" class="select-chip">Festival</button>
+                <button type="button" class="select-chip">For guests</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Compared to what you usually buy, this was</span>
+              <div class="select-chips" data-group="comparison" data-mode="single">
+                <button type="button" class="select-chip">Better</button>
+                <button type="button" class="select-chip">Same</button>
+                <button type="button" class="select-chip">Worse</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">What did you like? (optional, pick any)</span>
+              <div class="select-chips" data-group="liked">
+                <button type="button" class="select-chip">Taste</button>
+                <button type="button" class="select-chip">Sweetness level</button>
+                <button type="button" class="select-chip">Texture</button>
+                <button type="button" class="select-chip">Freshness</button>
+                <button type="button" class="select-chip">Packaging</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">What could be better? (optional, pick any)</span>
+              <div class="select-chips" data-group="improve">
+                <button type="button" class="select-chip">Too sweet</button>
+                <button type="button" class="select-chip">Not sweet enough</button>
+                <button type="button" class="select-chip">Texture</button>
+                <button type="button" class="select-chip">Packaging</button>
+                <button type="button" class="select-chip">Price</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Your area or pincode (optional)</span>
+              <input type="text" id="location" placeholder="e.g. Adyar, Chennai" maxlength="80">
+            </div>
+
+            <div class="field">
+              <span class="field-label">Anything else? (optional)</span>
+              <textarea id="comment" placeholder="Write a line or two if you'd like..." maxlength="300"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Send my review</button>
+            <p class="form-status" id="form-status"></p>
+          </form>
+        </div>
+
+        <div id="thanks-view" class="thanks" hidden>
+          <h2>Thank you</h2>
+          <p>This genuinely helps us decide what to make next. We're grateful you took the time.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ADD NEW SECTIONS HERE AS THE PRODUCT LINE GROWS —
+       e.g. a product gallery, more team members, or a shop link.
+       Copy the <section class="block"><div class="wrap">...</div></section>
+       pattern used above to keep the same rhythm and spacing. -->
+
+  <footer>
+    <div class="wrap">
+      <p>GD's Kitchen — homemade, one batch at a time.</p>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  // =========================================================
+  // CONFIG — paste your Google Apps Script Web App URL here.
+  // See the setup guide that came with this file.
+  // =========================================================
+  var SHEET_URL = "https://script.google.com/macros/s/AKfycbw3eai4tKBbncnUvGoZoV_rozIGIp1ZXimM1tS537diXT_6WsuYakJoZlKgFkE9aAZy/exec";
+
+  var rating = 0;
+  var liked = new Set();
+  var improve = new Set();
+  var singleValues = {
+    buyAgain: '',
+    priceBand: '',
+    frequency: '',
+    occasion: '',
+    comparison: ''
+  };
+
+  var starButtons = Array.prototype.slice.call(document.querySelectorAll('.star-btn'));
+  var ratingHint = document.getElementById('rating-hint');
+
+  function paintStars(value){
+    starButtons.forEach(function(btn){
+      var v = parseInt(btn.getAttribute('data-value'), 10);
+      var isFilled = v <= value;
+      btn.classList.toggle('filled', isFilled);
+      btn.setAttribute('aria-pressed', isFilled ? 'true' : 'false');
+    });
+  }
+
+  starButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      rating = parseInt(btn.getAttribute('data-value'), 10);
+      paintStars(rating);
+      ratingHint.textContent = rating + (rating === 1 ? ' star selected' : ' stars selected');
+      ratingHint.classList.remove('error');
+    });
+  });
+
+  // Multi-select groups (any number of chips can be selected)
+  function wireMultiChipGroup(selector, targetSet){
+    var container = document.querySelector('[data-group="' + selector + '"]');
+    var chips = Array.prototype.slice.call(container.querySelectorAll('.select-chip'));
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var label = chip.textContent.trim();
+        if(targetSet.has(label)){
+          targetSet.delete(label);
+          chip.classList.remove('selected');
+        } else {
+          targetSet.add(label);
+          chip.classList.add('selected');
+        }
+      });
+    });
+  }
+  wireMultiChipGroup('liked', liked);
+  wireMultiChipGroup('improve', improve);
+
+  // Single-select groups (only one chip active at a time, tap again to clear)
+  function wireSingleChipGroup(selector){
+    var container = document.querySelector('[data-group="' + selector + '"]');
+    var chips = Array.prototype.slice.call(container.querySelectorAll('.select-chip'));
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var label = chip.textContent.trim();
+        var alreadySelected = chip.classList.contains('selected');
+        chips.forEach(function(c){ c.classList.remove('selected'); });
+        if(alreadySelected){
+          singleValues[selector] = '';
+        } else {
+          chip.classList.add('selected');
+          singleValues[selector] = label;
+        }
+      });
+    });
+  }
+  ['buyAgain','priceBand','frequency','occasion','comparison'].forEach(wireSingleChipGroup);
+
+  var form = document.getElementById('review-form');
+  var submitBtn = document.getElementById('submit-btn');
+  var formStatus = document.getElementById('form-status');
+  var formView = document.getElementById('review-form-view');
+  var thanksView = document.getElementById('thanks-view');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if(rating === 0){
+      ratingHint.textContent = 'Please choose a rating first';
+      ratingHint.classList.add('error');
+      ratingHint.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    formStatus.textContent = '';
+
+    var payload = {
+      timestamp: new Date().toISOString(),
+      product: "GD's Kitchen — trial batch",
+      name: document.getElementById('reviewerName').value.trim(),
+      rating: rating,
+      buyAgain: singleValues.buyAgain,
+      priceBand: singleValues.priceBand,
+      frequency: singleValues.frequency,
+      occasion: singleValues.occasion,
+      comparison: singleValues.comparison,
+      liked: Array.from(liked),
+      improve: Array.from(improve),
+      location: document.getElementById('location').value.trim(),
+      comment: document.getElementById('comment').value.trim()
+    };
+
+    if(SHEET_URL.indexOf('https://script.google.com/macros/s/AKfycbw3eai4tKBbncnUvGoZoV_rozIGIp1ZXimM1tS537diXT_6WsuYakJoZlKgFkE9aAZy/exec') !== -1){
+      // No backend connected yet — still show thanks so the flow can be tested.
+      formView.hidden = true;
+      thanksView.hidden = false;
+      return;
+    }
+
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    }).then(function(){
+      formView.hidden = true;
+      thanksView.hidden = false;
+    }).catch(function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send my review';
+      formStatus.textContent = "Couldn't send that — check your connection and try again.";
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
