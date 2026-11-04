@@ -567,7 +567,7 @@
   // CONFIG — paste your Google Apps Script Web App URL here.
   // See the setup guide that came with this file.
   // =========================================================
-  var SHEET_URL = "https://script.google.com/macros/s/AKfycbw3eai4tKBbncnUvGoZoV_rozIGIp1ZXimM1tS537diXT_6WsuYakJoZlKgFkE9aAZy/exec";
+  var SHEET_URL = "https://script.google.com/macros/s/AKfycbxzE-MopGRB206QZcf6EAncAiwCQ_X79L9O0sZAhe940KCzhzFIMVDEeLiHA1WoK6qO/exec";
 
   var rating = 0;
   var liked = new Set();
@@ -677,7 +677,7 @@
       comment: document.getElementById('comment').value.trim()
     };
 
-    if(SHEET_URL.indexOf('https://script.google.com/macros/s/AKfycbw3eai4tKBbncnUvGoZoV_rozIGIp1ZXimM1tS537diXT_6WsuYakJoZlKgFkE9aAZy/exec') !== -1){
+    if(SHEET_URL.indexOf('https://script.google.com/macros/s/AKfycbxzE-MopGRB206QZcf6EAncAiwCQ_X79L9O0sZAhe940KCzhzFIMVDEeLiHA1WoK6qO/exec') !== -1){
       // No backend connected yet — still show thanks so the flow can be tested.
       formView.hidden = true;
       thanksView.hidden = false;
